@@ -1,29 +1,109 @@
-namespace classtutorial
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace OopAssignment
 {
-    public class Cart
+    public interface IItems{
+            int Item_id { get; set; }
+            int Price { get; set; }
+            int Quantity { get; set; }
+    }
+    public class Cart : IItems
     {
-        private items Item = new items();
-        public Cart addItem(int id, int price, int qty = 1){
-            Item.Item_id = id;
-            Item.Price = price;
-            Item.Quantity = qty;
+        static string cartPath = @"/Users/user/classtutorial/textsCart.txt";
+        public int Item_id { get; set; }
+        public int Price { get; set; }
+        public int Quantity { get; set; }
+
+        static List<IItems> itemCart = new List<IItems>();
+
+        public Cart AddItem(int id, int price, int qty = 1)
+        {
+            var carts = new Cart();
+            carts.Item_id = id;
+            carts.Price = price;
+            carts.Quantity = qty;
+            itemCart.Add(carts);
             return this;
         }
-        // public Cart removeItem(int id){
-        //     // return this;
-        // }
-        // public Cart addDiscount(string discount){
-        //     // return this;
-        // }
-        
-        // public int totalItems(){
-        //     return 
-        // }
+
+        public Cart RemoveItem(int id)
+        {
+            var carts = itemCart;
+            var newObj = new List<IItems>();
+            foreach (var x in carts)
+            {
+                if (x.Item_id != id)
+                {
+                    newObj.Add(x);
+                }
+            }
+            itemCart = newObj;
+            return this;
+        }
+
+        public Cart AddDiscount(int id)
+        {
+            var obj = itemCart;
+            foreach (var x in obj)
+            {
+                x.Price = x.Price * id / 100;
+            }
+            itemCart = obj;
+            return this;
+        }
+
+        public static int TotalItems()
+        {
+            return itemCart.Count();
+        }
+
+        public static int TotalQuantity()
+        {
+            int totalQty = 0;
+            foreach(var x in itemCart)
+            {
+                totalQty += x.Quantity;
+            }
+            return totalQty;
+        }
+
+        public static int TotalPrice()
+        {
+            int totalPrice = 0;
+            foreach (var x in itemCart)
+            {
+                totalPrice += x.Price * x.Quantity;
+            }
+            return totalPrice;
+        }
+
+        public static string ShowAllItems()
+        {
+            var allItems = new List<string>();
+            foreach(var x in itemCart)
+            {
+                allItems.Add(x.Item_id.ToString());
+            }
+            allItems.Distinct();
+            return String.Join(',', allItems);
+        }
+
+        public static void Checkout()
+        {
+            List<string> lines = new List<string>();
+
+            lines.Add("Item_id,Price,Qty");
+
+            foreach(var x in itemCart)
+            {
+                lines.Add($"{x.Item_id},{x.Price},{x.Quantity}");
+            }
+            File.WriteAllLines(cartPath, lines);
+        }
     }
-    
-    public class items{
-        public int Item_id{get; set;}
-        public int Price{get; set;}
-        public int Quantity{get; set;}
-    }
+
+
 }
