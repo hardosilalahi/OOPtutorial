@@ -9,16 +9,16 @@ namespace classtutorial
             Item.Quantity = qty;
             return this;
         }
-        public Cart removeItem(int id){
-            // return this;
-        }
-        public Cart addDiscount(string discount){
-            // return this;
-        }
+        // public Cart removeItem(int id){
+        //     // return this;
+        // }
+        // public Cart addDiscount(string discount){
+        //     // return this;
+        // }
         
-        public int totalItems(){
-            return 
-        }
+        // public int totalItems(){
+        //     return 
+        // }
     }
     
     public class items{
